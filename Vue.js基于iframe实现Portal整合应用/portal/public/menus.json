@@ -1,0 +1,9 @@
+[{
+  "name": "Product",
+  "url": "pms",
+  "icon": "mdi-wallet"
+}, {
+  "name": "Order",
+  "url": "oms",
+  "icon": "mdi-shopping"
+}]
