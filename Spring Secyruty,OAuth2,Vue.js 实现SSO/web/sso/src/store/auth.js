@@ -1,4 +1,6 @@
 import router from '../router/index.js';
+const jsonp = require('jsonp');
+
 
 export default {
   state: {
@@ -14,7 +16,14 @@ export default {
       const url = window.location.search.split('=')[1] && decodeURIComponent(window.location.search.split('=')[1]);
       console.log(url);
       if (url) {
-        window.location.href = `${url}?token=${payload.token}`;
+        // window.location.href = `${url}?token=${payload.token}`;
+        jsonp(`${url}?token=${payload.token}`, null, (err, data) => {
+          if (err) {
+            console.log(err);
+          } else {
+            console.log(data);
+          }
+        });
       } else {
         state.login = true;
         state.user = payload.user;
