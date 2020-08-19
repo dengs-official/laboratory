@@ -5,7 +5,9 @@
       v-model="sider.collapsed"
       :trigger="null"
     >
-      <div class="logo" />
+      <div class="logo">
+        <a-button style="width: 100%;" @click="onLogout">登出</a-button>
+      </div>
       <a-menu
         mode="inline"
         theme="dark"
@@ -38,6 +40,8 @@
 
 <script>
 
+import apis from '@/apis/index.js';
+
 const menuOptions = [{
   key: 'home',
   title: 'Home',
@@ -67,6 +71,9 @@ export default {
       this.menu.selectedKeys[0] !== key && this.$router.push({name: key});
 
       this._setSelectedKeys(key);
+    },
+    onLogout() {
+      this.$store.dispatch('logout');
     },
     _setSelectedKeys(key) {
       this.menu.selectedKeys = [key];

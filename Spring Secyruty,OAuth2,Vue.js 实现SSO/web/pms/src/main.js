@@ -14,5 +14,5 @@ store.dispatch(('auth')).then(() => {
   }).$mount('#app');
 }).catch(() => {
   console.log('Error');
-  window.location.href = 'http://localhost:8003?url=http://localhost:8004';
+  window.location.href = 'http://localhost:9000?url=http://localhost:9002';
 });

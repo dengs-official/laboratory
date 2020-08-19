@@ -43,6 +43,8 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
   if (to.meta && to.meta.login !== false && !store.state.auth.login) { // 需要登录
     next({name: 'login', query: {url: window.location.search.split('=')[1]}});
+  } else if (to.name === 'login' && store.state.auth.login) {
+    next({name: 'index'});
   } else {
     next();
   }

@@ -1,6 +1,6 @@
 import router from '../router/index.js';
+import apis from '../apis/index.js';
 const jsonp = require('jsonp');
-
 
 export default {
   state: {
@@ -11,13 +11,12 @@ export default {
   },
   mutations: {
     setAuth(state, payload) {
-      window.sessionStorage.setItem('token', payload.token);
+      document.cookie = `token=${payload.access_token};`;
 
       const url = window.location.search.split('=')[1] && decodeURIComponent(window.location.search.split('=')[1]);
-      console.log(url);
       if (url) {
-        // window.location.href = `${url}?token=${payload.token}`;
-        jsonp(`${url}?token=${payload.token}`, null, (err, data) => {
+        window.location.href = `${url}?token=${payload.access_token}`;
+        jsonp(`${url}?token=${payload.access_token}`, null, (err, data) => {
           if (err) {
             console.log(err);
           } else {
@@ -27,36 +26,38 @@ export default {
       } else {
         state.login = true;
         state.user = payload.user;
-        router.push({path: '/'});
+        router.push({name: 'index'});
       }
+    },
+    setOut(state, payload) {
+      state.login = false;
+      state.user = {
+        name: ''
+      };
+      router.push({path: '/login'});
     }
   },
   actions: {
     auth({commit, dispatch}) {
-      const token = window.sessionStorage.getItem('token');
-      const p = token ? Promise.resolve({
-        data: {
-          user: {
-            name: 'Admin'
-          },
-          token
-        }
-      }) : Promise.reject(new Error('Error Token'));
+      const token = document.cookie.split(';').filter((item) => (item.includes('token')))[0];
+      const p = apis.checkToken({accessToken: token ? token.split('=')[1] : 'undefined'});
 
       p.then((res) => {
-        commit('setAuth', res.data);
+        commit('setAuth', {access_token: token.split('=')[1]});
       });
+      return p;
+    },
+    logout({commit, dispatch}) {
+      const token = document.cookie.split(';').filter((item) => (item.includes('token')))[0];
+      const p = apis.logout({accessToken: token ? token.split('=')[1] : 'undefined'});
+      p.then((res) => {
+        commit('setOut');
+      });
+      return p;
     },
     login({commit, dispatch}, payload) {
       const {username, password} = payload;
-      const p = password === '123' ? Promise.resolve({
-        data: {
-          user: {
-            name: username
-          },
-          token: 'JSSIONID=12368313dsf'
-        }
-      }) : Promise.reject(new Error('Error Password'));
+      const p = apis.login({username, password});
       p.then((res) => {
         commit('setAuth', res.data);
       }).catch((e) => {

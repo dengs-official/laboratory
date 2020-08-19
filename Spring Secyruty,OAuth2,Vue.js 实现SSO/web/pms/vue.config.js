@@ -49,6 +49,11 @@ module.exports = {
           '^/api': '',
         },
       },
+      '/portal': {
+        target: process.env.VUE_APP_API_AUTH,
+        ws: false,
+        changeOrigin: true,
+      },
     },
   },
 };

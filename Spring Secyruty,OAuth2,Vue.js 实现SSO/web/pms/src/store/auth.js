@@ -1,3 +1,5 @@
+import apis from '../apis/index.js';
+
 export default {
   state: {
     auth: {
@@ -18,18 +20,12 @@ export default {
     }
   },
   actions: {
-    auth({state, commit, dispatch}) {
-      const token = (window.location.search.split('=')[1] && decodeURIComponent(window.location.search.split('=')[1])) || window.sessionStorage.getItem('token');
-      const p = token ? Promise.resolve({
-        data: {
-          user: {
-            name: 'Admin'
-          },
-          token
-        }
-      }) : Promise.reject(new Error('Error Token'));
+    auth({commit, dispatch}) {
+      const token = document.cookie.split(';').filter((item) => (item.includes('token')))[0];
+      const p = apis.checkToken({accessToken: token ? token.split('=')[1] : 'undefined'});
+
       p.then((res) => {
-        commit('setAuth', res.data);
+        commit('setAuth', {access_token: token.split('=')[1]});
       });
       return p;
     },
