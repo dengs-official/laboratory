@@ -1,4 +1,4 @@
-const baseURL = '/portal/oauth2';
+const baseURL = process.env.VUE_APP_API_AUTH;
 
 export default {
   login: {
