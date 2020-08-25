@@ -11,7 +11,7 @@ Vue.config.productionTip = false;
 
 function getApps() {
   return new Promise((resolve) => {
-    axios.get('./menus.json').then((result) => {
+    axios.get(`${process.env.NODE_ENV === 'production' ? process.env.VUE_APP_BASE_URL : ''}/menus.json`).then((result) => {
       Vue.prototype.$apps = result.data;
       resolve();
     });

@@ -22,6 +22,8 @@ const routes = [{
 }];
 
 const router = new VueRouter({
+  mode: 'history',
+  base: process.env.NODE_ENV === 'production' ? process.env.VUE_APP_BASE_URL : '/',
   routes,
 });
 

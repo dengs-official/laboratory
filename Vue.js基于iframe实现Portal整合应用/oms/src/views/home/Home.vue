@@ -31,7 +31,7 @@ export default {
   },
   methods: {
     onProduce() {
-      window.parent.location.href = '/micro-frontend/#/client/pms';
+      window.parent.location.href = '/portal/client/pms';
     },
   },
 };
