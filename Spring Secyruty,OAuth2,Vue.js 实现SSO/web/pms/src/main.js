@@ -14,5 +14,5 @@ store.dispatch(('auth')).then(() => {
   }).$mount('#app');
 }).catch(() => {
   console.log('Error');
-  window.location.href = 'http://172.18.2.15:26180/portal?url=http://localhost:9002/index.html';
+  window.location.href = 'http://172.18.2.15:26180/portal/sso/index.html?url=http://localhost:9002';
 });

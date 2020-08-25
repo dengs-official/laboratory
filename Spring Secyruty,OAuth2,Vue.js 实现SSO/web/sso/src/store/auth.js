@@ -11,18 +11,18 @@ export default {
   },
   mutations: {
     setAuth(state, payload) {
-      document.cookie = `token=${payload.access_token};`;
+      document.cookie = `token=${payload.access_token};path=/`;
 
       const url = window.location.search.split('=')[1] && decodeURIComponent(window.location.search.split('=')[1]);
       if (url) {
         window.location.href = `${url}?token=${payload.access_token}`;
-        jsonp(`${url}?token=${payload.access_token}`, null, (err, data) => {
-          if (err) {
-            console.log(err);
-          } else {
-            console.log(data);
-          }
-        });
+        // jsonp(`${url}?token=${payload.access_token}`, null, (err, data) => {
+        //   if (err) {
+        //     console.log(err);
+        //   } else {
+        //     console.log(data);
+        //   }
+        // });
       } else {
         state.login = true;
         state.user = payload.user;
@@ -38,14 +38,18 @@ export default {
     }
   },
   actions: {
-    auth({commit, dispatch}) {
+    async auth({commit, dispatch}) {
       const token = document.cookie.split(';').filter((item) => (item.includes('token')))[0];
-      const p = apis.checkToken({accessToken: token ? token.split('=')[1] : 'undefined'});
+      const p = await apis.checkToken({accessToken: token ? token.split('=')[1] : 'undefined'});
 
-      p.then((res) => {
-        commit('setAuth', {access_token: token.split('=')[1]});
-      });
+      commit('setAuth', {access_token: token.split('=')[1]});
       return p;
+      // p.then((res) => {
+      //   commit('setAuth', {access_token: token.split('=')[1]});
+      // }).finally(() => {
+      //   return p;
+      // });
+      // return p;
     },
     logout({commit, dispatch}) {
       const token = document.cookie.split(';').filter((item) => (item.includes('token')))[0];
