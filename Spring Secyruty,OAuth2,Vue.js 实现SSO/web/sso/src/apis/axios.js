@@ -1,8 +1,6 @@
 import axios from 'axios';
 import {message} from 'ant-design-vue';
-// import {ls} from '@/utils/index.js';
-// import i18n from '@/locales/index.js';
-// import store from '@/stores/index.js';
+import {ck} from '@/utils/index.js';
 
 // global defaultSettings
 axios.defaults.baseURL = (process.env.NODE_ENV === 'development' ? '/apis' : '') + process.env.VUE_APP_API_BASE_URL; // 开发环境中加上/api方便devServer进行代理
@@ -11,11 +9,7 @@ axios.defaults.headers.get['Content-Type'] = 'application/json;charset=UTF-8';
 
 // interceptors
 axios.interceptors.request.use((config) => {
-  // document.cookie = `language=${i18n.locale};`;
-  // config.headers.language = i18n.locale;
-
-  // const token = document.cookie.split(';').filter((item) => (item.includes('token')))[0];
-  // config.headers.Authorization = `bearer${token ? token.split('=')[1] : 'undefined'}`;
+  ck.get('accessToken') && config.auth !== false && (config.headers.Authorization = `Bearer${ck.get('accessToken')}`);
   return config;
 }, onError);
 
@@ -55,6 +49,7 @@ function onError(error) {
   if (response) {
     const {status} = response;
     switch (status) {
+      case 401:
       case 403:
         message.error('Forbidden');
         break;

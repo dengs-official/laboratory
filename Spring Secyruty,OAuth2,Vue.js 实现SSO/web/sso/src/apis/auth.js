@@ -4,7 +4,8 @@ export default {
   login: {
     url: '/login',
     baseURL,
-    method: 'post'
+    method: 'post',
+    auth: false,
   },
   logout: {
     url: '/logout',

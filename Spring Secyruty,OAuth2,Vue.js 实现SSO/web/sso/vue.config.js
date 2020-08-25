@@ -4,7 +4,7 @@ const webpack = require('webpack');
 const r = (dir) => path.resolve(__dirname, dir);
 
 module.exports = {
-  publicPath: './',
+  publicPath: process.env.NODE_ENV === 'production' ? process.env.VUE_APP_BASE_URL : '/',
   runtimeCompiler: true,
   productionSourceMap: false,
   configureWebpack: (config) => {

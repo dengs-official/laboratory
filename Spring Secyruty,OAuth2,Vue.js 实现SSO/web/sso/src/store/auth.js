@@ -1,5 +1,6 @@
 import router from '../router/index.js';
 import apis from '../apis/index.js';
+import {ck} from '../utils/index.js';
 const jsonp = require('jsonp');
 
 export default {
@@ -11,21 +12,25 @@ export default {
   },
   mutations: {
     setAuth(state, payload) {
-      document.cookie = `token=${payload.access_token};path=/`;
-
+      // jsonp(`http://172.18.2.6:8100/app/oauth2/setCookie?accessToken=${ck.get('accessToken')}&refreshToken=${ck.get('refreshToken')}`, null, (err, data) => {
+      //   if (err) {
+      //     console.log(err);
+      //   } else {
+      //     console.log(data);
+      //   }
+      // });
       const url = window.location.search.split('=')[1] && decodeURIComponent(window.location.search.split('=')[1]);
       if (url) {
-        window.location.href = `${url}?token=${payload.access_token}`;
-        // jsonp(`${url}?token=${payload.access_token}`, null, (err, data) => {
-        //   if (err) {
-        //     console.log(err);
-        //   } else {
-        //     console.log(data);
-        //   }
-        // });
+        window.location.href = url;
+        jsonp(`http://172.18.2.6:8100/app/setToken?accessToken=${payload.access_token}`, null, (err, data) => {
+          if (err) {
+            console.log(err);
+          } else {
+            console.log(data);
+          }
+        });
       } else {
         state.login = true;
-        state.user = payload.user;
         router.push({name: 'index'});
       }
     },
@@ -35,25 +40,20 @@ export default {
         name: ''
       };
       router.push({path: '/login'});
-    }
+    },
+    setCookie(state, payload) {
+      ck.set('accessToken', payload.accessToken);
+      ck.set('refreshToken', payload.refreshToken);
+    },
   },
   actions: {
     async auth({commit, dispatch}) {
-      const token = document.cookie.split(';').filter((item) => (item.includes('token')))[0];
-      const p = await apis.checkToken({accessToken: token ? token.split('=')[1] : 'undefined'});
-
-      commit('setAuth', {access_token: token.split('=')[1]});
+      const p = await apis.checkToken();
+      commit('setAuth');
       return p;
-      // p.then((res) => {
-      //   commit('setAuth', {access_token: token.split('=')[1]});
-      // }).finally(() => {
-      //   return p;
-      // });
-      // return p;
     },
     logout({commit, dispatch}) {
-      const token = document.cookie.split(';').filter((item) => (item.includes('token')))[0];
-      const p = apis.logout({accessToken: token ? token.split('=')[1] : 'undefined'});
+      const p = apis.logout();
       p.then((res) => {
         commit('setOut');
       });
@@ -63,7 +63,16 @@ export default {
       const {username, password} = payload;
       const p = apis.login({username, password});
       p.then((res) => {
+        commit('setCookie', {accessToken: res.data.access_token, refreshToken: res.data.refresh_token});
         commit('setAuth', res.data);
+      }).catch((e) => {
+        console.log(e);
+      });
+    },
+    refresh({commit, dispatch}) {
+      const p = apis.refresh({refreshToken: ck.get('refreshToken')});
+      p.then((res) => {
+        commit('setCookie', {accessToken: res.data.access_token, refreshToken: res.data.refresh_token});
       }).catch((e) => {
         console.log(e);
       });
