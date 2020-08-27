@@ -1,8 +1,11 @@
 import axios from 'axios';
 import {message} from 'ant-design-vue';
+import {ck} from '@/utils/index.js';
+
 // import {ls} from '@/utils/index.js';
 // import i18n from '@/locales/index.js';
 // import store from '@/stores/index.js';
+import {portalUrl, clientUrl, apiUrl} from '@/configs/auth.js';
 
 // global defaultSettings
 axios.defaults.baseURL = (process.env.NODE_ENV === 'development' ? '/apis' : '') + process.env.VUE_APP_API_BASE_URL; // 开发环境中加上/api方便devServer进行代理
@@ -11,8 +14,7 @@ axios.defaults.headers.get['Content-Type'] = 'application/json;charset=UTF-8';
 
 // interceptors
 axios.interceptors.request.use((config) => {
-  // document.cookie = `language=${i18n.locale};`;
-  // config.headers.language = i18n.locale;
+  ck.get('accessToken') && config.auth !== false && (config.headers.Authorization = `Bearer${ck.get('accessToken')}`);
 
   return config;
 }, onError);
@@ -53,8 +55,9 @@ function onError(error) {
   if (response) {
     const {status} = response;
     switch (status) {
+      case 401:
       case 403:
-        window.location.href = 'http://172.18.2.15:26180/portal?url=https://172.18.2.6:26180/client/pms/index.html';
+        window.location.href = `${portalUrl}?url=${clientUrl}&api=${apiUrl}`;
         message.error('Forbidden');
         break;
       default: break;

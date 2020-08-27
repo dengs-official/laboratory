@@ -1,6 +1,6 @@
 import router from '../router/index.js';
 import apis from '../apis/index.js';
-import {ck} from '../utils/index.js';
+import {ck, uk} from '../utils/index.js';
 const jsonp = require('jsonp');
 
 export default {
@@ -12,23 +12,9 @@ export default {
   },
   mutations: {
     setAuth(state, payload) {
-      // jsonp(`http://172.18.2.6:8100/app/oauth2/setCookie?accessToken=${ck.get('accessToken')}&refreshToken=${ck.get('refreshToken')}`, null, (err, data) => {
-      //   if (err) {
-      //     console.log(err);
-      //   } else {
-      //     console.log(data);
-      //   }
-      // });
-      const url = window.location.search.split('=')[1] && decodeURIComponent(window.location.search.split('=')[1]);
+      const url = uk.get('url');
       if (url) {
         window.location.href = url;
-        jsonp(`http://172.18.2.6:8100/app/setToken?accessToken=${payload.access_token}`, null, (err, data) => {
-          if (err) {
-            console.log(err);
-          } else {
-            console.log(data);
-          }
-        });
       } else {
         state.login = true;
         router.push({name: 'index'});
@@ -44,6 +30,16 @@ export default {
     setCookie(state, payload) {
       ck.set('accessToken', payload.accessToken);
       ck.set('refreshToken', payload.refreshToken);
+      const api = uk.get('api');
+      if (api) {
+        jsonp(`${api}?accessToken=${ck.get('accessToken')}&refreshToken=${ck.get('refreshToken')}`, null, (err, data) => {
+          if (err) {
+            console.log(err);
+          } else {
+            console.log(data);
+          }
+        });
+      }
     },
   },
   actions: {

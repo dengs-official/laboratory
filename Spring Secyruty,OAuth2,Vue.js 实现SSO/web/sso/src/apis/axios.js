@@ -32,7 +32,6 @@ axios.interceptors.response.use((response) => {
           }
           break;
         default:
-          // message.error(i18n.t(`RESPONSE_CODE_${data.code}`, [data.formatData] || []));
           message.error('失败');
           break;
       }
