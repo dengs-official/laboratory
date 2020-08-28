@@ -42,12 +42,12 @@ module.exports = {
     hot: true,
     port: 8000,
     proxy: {
-      '/api': {
+      '/apis': {
         target: process.env.VUE_APP_API_ORIGIN,
         ws: false,
         changeOrigin: true,
         pathRewrite: {
-          '^/api': '',
+          '^/apis': '',
         },
       },
       '/portal': {

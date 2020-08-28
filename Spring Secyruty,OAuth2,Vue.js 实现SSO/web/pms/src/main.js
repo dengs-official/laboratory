@@ -3,7 +3,7 @@ import App from './App.vue';
 import router from './router';
 import store from './store';
 import './plugins/index.js';
-import {portalUrl, clientUrl, apiUrl} from './configs/auth.js';
+import CONFIG from './configs/index.js';
 
 Vue.config.productionTip = false;
 
@@ -14,6 +14,6 @@ store.dispatch(('auth')).then(() => {
     render: (h) => h(App),
   }).$mount('#app');
 }).catch(() => {
-  window.location.href = `${portalUrl}?url=${clientUrl}&api=${apiUrl}`;
+  window.location.href = `${CONFIG.auth.portalUrl}?url=${CONFIG.auth.clientUrl}&api=${CONFIG.auth.clientApi}`;
   console.log('Error');
 });

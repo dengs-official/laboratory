@@ -1,11 +1,8 @@
 import axios from 'axios';
 import {message} from 'ant-design-vue';
-import {ck} from '@/utils/index.js';
-
-// import {ls} from '@/utils/index.js';
-// import i18n from '@/locales/index.js';
-// import store from '@/stores/index.js';
-import {portalUrl, clientUrl, apiUrl} from '@/configs/auth.js';
+import {ck, du} from '@/utils/index.js';
+import store from '@/store/index.js';
+import CONFIG from '@/configs/index.js';
 
 // global defaultSettings
 axios.defaults.baseURL = (process.env.NODE_ENV === 'development' ? '/apis' : '') + process.env.VUE_APP_API_BASE_URL; // 开发环境中加上/api方便devServer进行代理
@@ -14,8 +11,13 @@ axios.defaults.headers.get['Content-Type'] = 'application/json;charset=UTF-8';
 
 // interceptors
 axios.interceptors.request.use((config) => {
-  ck.get('accessToken') && config.auth !== false && (config.headers.Authorization = `Bearer${ck.get('accessToken')}`);
-
+  if (config.auth !== false && ck.get('accessToken')) {
+    config.headers.Authorization = `Bearer${ck.get('accessToken')}`;
+  }
+  const accessTokenExp = store.state.auth.token.accessTokenExp;
+  if (config.auth !== false && accessTokenExp && accessTokenExp - du.getTimestamp() < CONFIG.auth.refreshTokenTime) {
+    store.dispatch('refresh');
+  }
   return config;
 }, onError);
 
@@ -26,19 +28,15 @@ axios.interceptors.response.use((response) => {
       return Promise.reject(data);
     }
     if (data.success === false) {
-      // const msg = data.msg || data.message;
       switch (data.code) {
         case 200:
           // 成功无需提示
           break;
-        case -1: // 生产环境用于调试错误
-          if (process.env.NODE_ENV === 'development') {
-            /* eslint-disable-next-line */
-            console.error(data);
-          }
+        case -1:
+          // 生产环境用于调试错误
+          console.error(data);
           break;
         default:
-          // message.error(i18n.t(`RESPONSE_CODE_${data.code}`, [data.formatData] || []));
           message.error('失败');
           break;
       }
@@ -57,7 +55,7 @@ function onError(error) {
     switch (status) {
       case 401:
       case 403:
-        window.location.href = `${portalUrl}?url=${clientUrl}&api=${apiUrl}`;
+        window.location.href = `${CONFIG.auth.portalUrl}?url=${CONFIG.auth.clientUrl}&api=${CONFIG.auth.clientApi}`;
         message.error('Forbidden');
         break;
       default: break;

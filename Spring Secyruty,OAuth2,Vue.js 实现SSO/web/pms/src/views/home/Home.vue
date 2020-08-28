@@ -1,12 +1,19 @@
 <template>
   <div class="home-wrapper">
-    pms home
+    <a-button style="width: 100%;" @click="onRefresh">续签</a-button>
   </div>
 </template>
 
 <script>
+import apis from '@/apis/index.js';
+
 export default {
-  name: 'home'
+  name: 'home',
+  methods: {
+    onRefresh() {
+      apis.test();
+    }
+  }
 };
 </script>
 

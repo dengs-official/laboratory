@@ -4,6 +4,8 @@ export default {
   login: {
     url: '/login',
     baseURL,
+    method: 'post',
+    auth: false
   },
   logout: {
     url: '/logout',
@@ -17,6 +19,7 @@ export default {
   refreshToken: {
     url: '/refreshToken',
     baseURL,
-    method: 'post'
+    method: 'post',
+    auth: false,
   }
 };

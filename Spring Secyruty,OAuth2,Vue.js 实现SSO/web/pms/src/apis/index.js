@@ -2,6 +2,9 @@ import axios from './axios.js';
 import auth from './auth.js';
 
 const apis = {
+  test: {
+    url: '/test'
+  }
 };
 
 assign(

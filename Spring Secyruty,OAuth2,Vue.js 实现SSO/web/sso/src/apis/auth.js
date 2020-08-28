@@ -19,6 +19,7 @@ export default {
   refreshToken: {
     url: '/refreshToken',
     baseURL,
-    method: 'post'
+    method: 'post',
+    auth: false,
   }
 };
