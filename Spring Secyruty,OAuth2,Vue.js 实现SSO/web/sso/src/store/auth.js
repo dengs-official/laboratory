@@ -24,7 +24,7 @@ export default {
         const api = uk.get('api');
         if (api) {
           jsonp(
-            `${api}?accessToken=${ck.get('accessToken')}&refreshToken=${ck.get('refreshToken')}`,
+            `${api}/oauth2/setCookie?accessToken=${ck.get('accessToken')}&refreshToken=${ck.get('refreshToken')}`,
             null,
             (err, data) => {
               if (err) {

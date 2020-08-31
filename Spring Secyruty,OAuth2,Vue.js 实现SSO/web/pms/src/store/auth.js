@@ -25,7 +25,7 @@ export default {
 
       // 中token到portal
       jsonp(
-        `${CONFIG.auth.portalApi}?accessToken=${ck.get('accessToken')}&refreshToken=${ck.get('refreshToken')}`,
+        `${CONFIG.auth.portalApi}/oauth2/setCookie?accessToken=${ck.get('accessToken')}&refreshToken=${ck.get('refreshToken')}`,
         null,
         (err, data) => {
           if (err) {

@@ -1,23 +1,25 @@
-const baseURL = process.env.VUE_APP_API_AUTH;
+import CONFIG from '@/configs/index.js';
+
+const baseURL = CONFIG.auth.portalApi;
 
 export default {
   login: {
-    url: '/login',
+    url: '/oauth2/login',
     baseURL,
     method: 'post',
     auth: false
   },
   logout: {
-    url: '/logout',
+    url: '/oauth2/logout',
     baseURL,
     method: 'delete'
   },
   checkToken: {
-    url: '/checkToken',
+    url: '/oauth2/checkToken',
     baseURL,
   },
   refreshToken: {
-    url: '/refreshToken',
+    url: '/oauth2/refreshToken',
     baseURL,
     method: 'post',
     auth: false,
