@@ -14,7 +14,7 @@ import './Render.less';
  * 8.jsx插槽可以通过v-slots指令对象，或者节点内{{}}对象传入
  */
 const Card = {
-  // inheritAttrs: false,
+  inheritAttrs: false,
   name: 'Card',
   props: {
     header: {
