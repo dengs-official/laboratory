@@ -1,5 +1,5 @@
 <template>
-  <a-layout class="layout-wrap">
+  <a-layout class="layout-wrapper">
     <a-layout-sider>
       <a-menu :selectedKeys="selectedKeys" @click="onMenuClick">
         <a-menu-item v-for="menu in menus" :key="menu.name">
@@ -50,8 +50,11 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-.layout-wrap {
+.layout-wrapper {
   height: 100%;
+  .ant-layout-content {
+    padding: 8px;
+  }
 }
 
 </style>
