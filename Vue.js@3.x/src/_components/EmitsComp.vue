@@ -34,6 +34,7 @@
 
 <script>
 export default {
+  // inheritAttrs: false,
   name: 'EmitComp',
   emits: {
     submit: (payload) => {
@@ -54,6 +55,7 @@ export default {
   methods: {
     onSubmit(e) {
       e.preventDefault();
+      e.stopPropagation();
       this.$emit('submit', this.form);
     },
   },

@@ -5,6 +5,7 @@ import {
   List,
   Menu,
   Select,
+  Card,
 } from 'ant-design-vue';
 
 const comments = [
@@ -14,6 +15,7 @@ const comments = [
   List,
   Menu,
   Select,
+  Card,
 ];
 
 export default function use(app) {

@@ -23,13 +23,23 @@ export default {
     const stop = watchEffect(() => console.log(count.value));
 
     const result = ref(0);
-    watchEffect(async (onInvalidate) => {
+    watchEffect(
+      async (onInvalidate) => {
       // count.value = await Promise.resolve(result.value * 2);
-      console.log(result.value);
-      onInvalidate(() => {
-        console.log('onInvalidate');
-      });
-    }, { onTrigger(e) { console.log(e); }, onTrack(e) { console.log(e); } });
+        console.log(result.value);
+        onInvalidate(() => {
+          console.log('onInvalidate');
+        });
+      },
+      {
+        onTrigger(e) {
+          console.log(e);
+        },
+        onTrack(e) {
+          console.log(e);
+        },
+      },
+    );
 
     watch([count, result], (to, from) => { console.log(to); });
 
