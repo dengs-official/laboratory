@@ -9,7 +9,7 @@
 
 <script>
 // @ is an alias to /src
-import VModelComp from '@/components/VModelComp.vue';
+import VModelComp from '@/_components/VModelComp.vue';
 
 export default {
   name: 'VModel',

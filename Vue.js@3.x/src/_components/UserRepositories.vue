@@ -16,8 +16,8 @@
 
 <script>
 import { toRefs } from 'vue';
-import useUserRepositories from './useUserRepositories';
-import useFilterRepositories from './useFilterRepositories';
+import useUserRepositories from '@/_hooks/useUserRepositories';
+import useFilterRepositories from '@/_hooks/useFilterRepositories';
 
 export default {
   name: 'UserRepositories',

@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import SetupComp from '@/components/SetupComp.vue';
+import SetupComp from '@/_components/SetupComp.vue';
 
 export default {
   name: 'Setup',

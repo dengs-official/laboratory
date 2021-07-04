@@ -1,5 +1,4 @@
 <script>
-import { toRefs } from 'vue';
 
 export default {
   name: 'SetupComp',

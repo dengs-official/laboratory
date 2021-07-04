@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import EmitsComp from '@/components/EmitsComp.vue';
+import EmitsComp from '@/_components/EmitsComp.vue';
 
 export default {
   name: 'EmitsOption',

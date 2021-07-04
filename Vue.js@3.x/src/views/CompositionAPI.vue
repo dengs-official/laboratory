@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import UserRepositories from '@/components/CompositionAPI/UserRepositories.vue';
+import UserRepositories from '@/_components/UserRepositories.vue';
 
 export default {
   name: 'CompositionAPI',
